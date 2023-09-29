@@ -15,7 +15,7 @@ export default function App() {
     if (!localStorage.getItem("mern-chat-app")) {
       return <Navigate to={"/"} />;
     }
-    return children;
+    return <ChatPage />;
   }
 
   const router = createBrowserRouter([
