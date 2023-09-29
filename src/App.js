@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
+import ChatProvider from "./Context/ChatProvider.js";
+import HomePage from "./pages/HomePage.js";
+import ChatPage from "./pages/ChatPage.js";
 
-function App() {
+export default function App() {
+  // protected routing (check login)
+  function ProtectedRoute({ children }) {
+    if (!localStorage.getItem("mern-chat-app")) {
+      return <Navigate to={"/"} />;
+    }
+    return children;
+  }
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <HomePage />,
+    },
+    {
+      path: "/chats",
+      element: (
+        <ProtectedRoute>
+          <ChatPage />
+        </ProtectedRoute>
+      ),
+    },
+  ]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChatProvider>
+      <ChakraProvider>
+        <RouterProvider router={router} />
+      </ChakraProvider>
+    </ChatProvider>
   );
 }
-
-export default App;
