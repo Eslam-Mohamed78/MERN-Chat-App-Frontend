@@ -50,7 +50,7 @@ export default function ProfileModal({ children, user }) {
               <Image
                 borderRadius={"full"}
                 boxSize={"150px"}
-                src={userInfo.pic}
+                src={user ? user.pic.url : userInfo.pic.url}
                 alt={userInfo.name}
               />
               <Text
