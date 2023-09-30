@@ -103,6 +103,8 @@ export default function SideDrawer({ isOpen, onClose }) {
         // add this chat to the chats state if not in it
         // because if it is a <<new created>> chat will not be
         // in the logged user chats.
+        if(!chats) setChats(res.data.results)
+
         for (const chat of chats) {
           const currChat = res.data.results;
           if (chat._id !== currChat._id) {

@@ -62,7 +62,7 @@ export default function MyChats() {
         console.error(error);
         setisloading(false);
         toast({
-          description: "Failed to load user chats!",
+          description: "User chats not found!",
           status: "error",
           duration: 3000,
           isClosable: true,
