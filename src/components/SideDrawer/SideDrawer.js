@@ -181,7 +181,6 @@ export default function SideDrawer({ isOpen, onClose }) {
             </List>
           )}
 
-          {loadingChat && <Spinner ml={"auto"} display={"flex"} />}
         </DrawerBody>
 
         <DrawerFooter>
