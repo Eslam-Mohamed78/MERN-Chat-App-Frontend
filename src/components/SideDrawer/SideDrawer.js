@@ -26,7 +26,8 @@ export default function SideDrawer({ isOpen, onClose }) {
   const [isloading, setisloading] = useState(false);
   const [loadingChat, setloadingChat] = useState(true);
   const [searchResult, setsearchResult] = useState(null);
-  const { setSelectedChat, chats, setChats } = ChatState();
+  const { setSelectedChat, chats, setChats, reloadChats, setreloadChats } =
+    ChatState();
   const toast = useToast();
 
   // Only the validation needed is required() / because user doesn't
@@ -47,7 +48,9 @@ export default function SideDrawer({ isOpen, onClose }) {
   });
 
   // global for any fetch method
-  const token = `${process.env.REACT_APP_BEARER_KEY}${localStorage.getItem("mern-chat-app")}`;
+  const token = `${process.env.REACT_APP_BEARER_KEY}${localStorage.getItem(
+    "mern-chat-app"
+  )}`;
   const config = {
     headers: {
       "content-type": "application/json",
@@ -59,7 +62,10 @@ export default function SideDrawer({ isOpen, onClose }) {
     setisloading(true);
 
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/user?search=${values.search}`, config)
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/user?search=${values.search}`,
+        config
+      )
       .then((res) => {
         console.log(res.data);
         setisloading(false);
@@ -103,7 +109,7 @@ export default function SideDrawer({ isOpen, onClose }) {
         // add this chat to the chats state if not in it
         // because if it is a <<new created>> chat will not be
         // in the logged user chats.
-        if(!chats) setChats(res.data.results)
+        if (!chats) setChats(res.data.results);
 
         for (const chat of chats) {
           const currChat = res.data.results;
@@ -112,6 +118,7 @@ export default function SideDrawer({ isOpen, onClose }) {
           }
         }
 
+        setreloadChats(!reloadChats);
         setSelectedChat(res.data.results);
         setloadingChat(false);
         onClose();
@@ -182,7 +189,6 @@ export default function SideDrawer({ isOpen, onClose }) {
               ))}
             </List>
           )}
-
         </DrawerBody>
 
         <DrawerFooter>
