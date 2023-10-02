@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
-import io from "socket.io-client";
 
 const chatContext = createContext();
 
@@ -10,6 +9,7 @@ export default function ChatProvider(props) {
   const [chats, setChats] = useState([]);
   const [reloadChats, setreloadChats] = useState(false);
   const [notifications, setnotifications] = useState([]);
+  const [allmessages, setallmessages] = useState([]);
 
   // save logged user info
   function decodeUserInfo() {
@@ -26,8 +26,7 @@ export default function ChatProvider(props) {
     }
   }, []);
 
-  // Initialize socket for client
-  let socket = io(process.env.REACT_APP_BASE_URL);
+
 
   return (
     <chatContext.Provider
@@ -42,7 +41,8 @@ export default function ChatProvider(props) {
         setreloadChats,
         notifications,
         setnotifications,
-        socket,
+        allmessages,
+        setallmessages,
         decodeUserInfo,
       }}
     >

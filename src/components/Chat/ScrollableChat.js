@@ -3,8 +3,8 @@ import React from "react";
 import ScrollableFeed from "react-scrollable-feed";
 import { ChatState } from "../../Context/ChatProvider.js";
 
-export default function ScrollableChat({ allmessages }) {
-  const { userInfo } = ChatState();
+export default function ScrollableChat() {
+  const { userInfo, allmessages, setallmessages } = ChatState();
   const loggedUserId = userInfo.id;
 
   // Avatar will be displayed next to sender messages not loggedUser
@@ -32,6 +32,7 @@ export default function ScrollableChat({ allmessages }) {
             <Box
               key={message._id}
               display={"flex"}
+              alignItems={"center"}
               alignSelf={
                 loggedUserId === message.sender._id ? "flex-end" : "flex-start"
               }
@@ -48,12 +49,11 @@ export default function ScrollableChat({ allmessages }) {
                   hasArrow
                 >
                   <Avatar
-                    mt={"7px"}
                     mr={"7px"}
-                    size={"sm"}
+                    size={"xs"}
                     cursor={"pointer"}
-                    name={message.sender.name}
-                    src={message.sender.pic}
+                    name={message.sender.name.url}
+                    src={message.sender.pic.url}
                   />
                 </Tooltip>
               ) : null}

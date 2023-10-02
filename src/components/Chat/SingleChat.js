@@ -16,10 +16,10 @@ import ProfileModal from "../NavBar/ProfileModal.js";
 import UpdateGroupChatModal from "../GroupChat/UpdateGroupChatModal.js";
 import axios from "axios";
 import ScrollableChat from "./ScrollableChat.js";
+import io from "socket.io-client";
 
 export default function SingleChat() {
   const {
-    socket,
     userInfo,
     selectedChat,
     setSelectedChat,
@@ -27,33 +27,35 @@ export default function SingleChat() {
     setnotifications,
     reloadChats,
     setreloadChats,
+    allmessages,
+    setallmessages,
   } = ChatState();
   const [messagesLoading, setmessagesLoading] = useState(false);
   const [newMessage, setnewMessage] = useState("");
-  const [allmessages, setallmessages] = useState([]);
   const toast = useToast();
   const selectedChatRef = useRef(selectedChat);
-
+  let socket;
   //*********** Socket-Client **********//
-  // we need to send message to DB & socket-room
-  // Both in sendMessage() function
-
-  // we need to recieve messages that come from any
-  // room we are in.
-  // If the room(chat) isn't the current chat we send
-  // notification to that chat.
+  // Initialize socket for client
+  // useEffect(() => {
+  socket = io(process.env.REACT_APP_BASE_URL);
+  socket.emit("userRoom", userInfo.id);
+  // }, []);
 
   // selectedChat loose its value inside socket.on so make ref for it.
   useEffect(() => {
-    socket.on("recieveMessage", (chat) => {
-      if (selectedChatRef?.current?._id === chat.chatId._id) {
-        setallmessages((allmessages) => [...allmessages, chat]);
-      } else {
+    socket.on("recieveMessage", async (chat) => {
+      console.log("recievedMessage", chat);
+
+      if (
+        !selectedChatRef.current ||
+        selectedChatRef?.current?._id !== chat.chatId._id
+      ) {
         // send notification
-        if (!notifications.includes(chat)) {
-          setnotifications((notifications) => [...notifications, chat]);
-          setreloadChats(!reloadChats);
-        }
+        setnotifications((notifications) => [...notifications, chat]);
+        setreloadChats(!reloadChats);
+      } else {
+        setallmessages((allmessages) => [...allmessages, chat]);
       }
     });
   }, []);
@@ -95,9 +97,12 @@ export default function SingleChat() {
         config
       )
       .then((res) => {
-        console.log("messages:", res.data);
+        console.log("messages:", res.data.results);
         setmessagesLoading(false);
         setallmessages(res.data.results);
+
+        // join chat rooms (socket) to get notifications
+        socket.emit("join chat", selectedChat._id);
       })
       .catch((error) => {
         console.error(error);
@@ -123,15 +128,15 @@ export default function SingleChat() {
       // send message to DB
       await axios
         .post(`${process.env.REACT_APP_BASE_URL}/message`, values, config)
-        .then((res) => {
-          console.log(res.data);
+        .then(async (res) => {
+          console.log("sendChat:", res.data.results);
+          setnewMessage("");
 
           // send message to a socket-room.
           const chat = res.data.results;
           socket.emit("newMessage", chat);
 
-          // setallmessages([...allmessages, res.data.results]);
-          setnewMessage("");
+          setallmessages((allmessages) => [...allmessages, res.data.results]);
         })
         .catch((error) => {
           console.error(error);
@@ -195,7 +200,7 @@ export default function SingleChat() {
               </Box>
             ) : (
               <Box display={"flex"} flexDir={"column"} overflowY={"scroll"}>
-                <ScrollableChat allmessages={allmessages} />
+                <ScrollableChat />
               </Box>
             )}
 

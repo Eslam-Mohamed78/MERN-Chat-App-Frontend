@@ -35,7 +35,9 @@ export default function MyChats() {
   };
 
   // global for any fetch method
-  const token = `${process.env.REACT_APP_BEARER_KEY}${localStorage.getItem("mern-chat-app")}`;
+  const token = `${process.env.REACT_APP_BEARER_KEY}${localStorage.getItem(
+    "mern-chat-app"
+  )}`;
   const config = {
     headers: {
       "content-type": "application/json",
@@ -48,15 +50,10 @@ export default function MyChats() {
 
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/chat`, config)
-      .then(async(res) => {
+      .then(async (res) => {
         console.log("chats: ", res.data);
         setisloading(false);
         await setChats(res.data.results);
-
-        // join chat rooms (socket) to get notifications
-        res.data.results?.map((chat) => {
-          socket.emit("join chat", chat._id);
-        });
       })
       .catch((error) => {
         console.error(error);

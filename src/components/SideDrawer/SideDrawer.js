@@ -12,7 +12,6 @@ import {
   HStack,
   Input,
   List,
-  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import ChatLoading from "../Chat/ChatLoading.js";
