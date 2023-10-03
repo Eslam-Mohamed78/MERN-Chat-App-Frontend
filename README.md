@@ -18,7 +18,7 @@
 
 - Validation
 
-- Real-time single & group chat notification
+- Real-time single & group chat Notification
 
 Technologies: 
 - Socket.io
