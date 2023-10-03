@@ -1,7 +1,7 @@
-Main-Features: 
+*Main-Features: 
 Real-time chatting
-*One-to-one chat
-Group chat 
+One-to-one chat
+*Group chat 
   - add & remove members only by admin
   - update group name
   - leave group
