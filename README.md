@@ -30,6 +30,6 @@ Technologies:
 - HTML5
 - CSS3
 
-## Video-demo: https://www.youtube.com/watch?v=pfYntPXr_DI
-## Visit-App: https://fe-mern-chat.onrender.com/
-## Backend-repo: https://github.com/Eslam-Mohamed78/MERN-Chat-App-Backend
+### Video-demo: https://www.youtube.com/watch?v=pfYntPXr_DI
+### Visit-App: https://fe-mern-chat.onrender.com/
+### Backend-repo: https://github.com/Eslam-Mohamed78/MERN-Chat-App-Backend
